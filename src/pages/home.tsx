@@ -3,6 +3,7 @@ import { featuredItems, programs } from '@/constants'
 import men from '@/assets/men.png'
 import { Card } from '@/components/ui/card'
 import { FaArrowRightLong } from 'react-icons/fa6'
+import { Link } from 'react-router-dom'
 
 function Home() {
 	return (
@@ -14,9 +15,11 @@ function Home() {
 						A huge selection of health and fitness content, healthy recipes and
 						transformormation stories to help you get fit and stay fit
 					</p>
-					<Button className='w-fit mt-6 font-bold h-12 ' size={'lg'}>
-						Join club me
-					</Button>
+					<Link to={'/auth'}>
+						<Button className='w-fit mt-6 font-bold h-12 ' size={'lg'}>
+							Join club me
+						</Button>
+					</Link>
 					<div className='mt-24'>
 						<p className='text-muted-foreground'>AS FEATURED IN</p>
 						<div className='flex items-center gap-4 mt-2'>
