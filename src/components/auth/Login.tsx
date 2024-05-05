@@ -2,9 +2,34 @@ import { useAuthState } from '@/stores/auth.store'
 import { Input } from '../ui/input'
 import { Separator } from '../ui/separator'
 import { Button } from '../ui/button'
+import { useForm } from 'react-hook-form'
+import { z } from 'zod'
+import { loginSchema } from '@/lib/validation'
+import { zodResolver } from '@hookform/resolvers/zod'
+import {
+	Form,
+	FormControl,
+	FormField,
+	FormItem,
+	FormLabel,
+	FormMessage
+} from '../ui/form'
 
 function Login() {
 	const { setAuth } = useAuthState()
+
+	const form = useForm<z.infer<typeof loginSchema>>({
+		resolver: zodResolver(loginSchema),
+		defaultValues: {
+			email: '',
+			password: ''
+		}
+	})
+
+	const onSubmit = async (values: z.infer<typeof loginSchema>) => {
+		console.log(values)
+	}
+
 	return (
 		<div className='flex flex-col'>
 			<h2 className='text-xl font-bold'>Login</h2>
@@ -18,15 +43,43 @@ function Login() {
 				</span>
 			</p>
 			<Separator className='my-2' />
-			<div>
-				<span>Email</span>
-				<Input placeholder='example@gmail.com' />
-			</div>
-			<div className='mt-2'>
-				<span>Password</span>
-				<Input placeholder='*****' type='password' />
-			</div>
-			<Button className='w-full h-12 mt-2'>Login</Button>
+			<Form {...form}>
+				<form onSubmit={form.handleSubmit(onSubmit)} className='space-y-2'>
+					<FormField
+						control={form.control}
+						name='email'
+						render={({ field }) => (
+							<FormItem>
+								<FormLabel>Email address</FormLabel>
+								<FormControl>
+									<Input placeholder='example@gmail.com' {...field} />
+								</FormControl>
+
+								<FormMessage />
+							</FormItem>
+						)}
+					/>
+					<FormField
+						control={form.control}
+						name='password'
+						render={({ field }) => (
+							<FormItem>
+								<FormLabel>Password</FormLabel>
+								<FormControl>
+									<Input placeholder='*****' {...field} />
+								</FormControl>
+
+								<FormMessage />
+							</FormItem>
+						)}
+					/>
+					<div>
+						<Button type='submit' className='mt-2 h-12 w-full'>
+							Submit
+						</Button>
+					</div>
+				</form>
+			</Form>
 		</div>
 	)
 }
